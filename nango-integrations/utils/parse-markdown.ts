@@ -21,7 +21,7 @@ export const formatMarkdownLinks = (content: string): string => {
     const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)\s]+)\)?/g;
 
     // Replace markdown links with "link text: url", handling missing closing parenthesis
-    return content.replace(markdownLinkRegex, (match, linkText, url) => {
+    return content.replace(markdownLinkRegex, (_match, linkText, url) => {
         if (!url.endsWith(')')) {
             return `${linkText}: ${url}`;
         } else {

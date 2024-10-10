@@ -1,6 +1,8 @@
 import type { NangoAction, ProxyConfiguration, LastSyncDate } from '../../models';
 import { extractGettingStarted, removeHtmlLikeTags, formatMarkdownLinks } from '../../utils/parse-markdown.js';
 
+const githubRawContentBase = `https://raw.githubusercontent.com`;
+
 export default async function runAction(nango: NangoAction, input: LastSyncDate): Promise<void> {
     let cursor: string | null = null;
 
@@ -41,10 +43,9 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
 
             await nango.log(`Created category: ${name}`);
 
-            const readMePage = `https://raw.githubusercontent.com`;
 
             const mdxResponse = await nango.get({
-                baseUrlOverride: 'https://raw.githubusercontent.com',
+                baseUrlOverride: githubRawContentBase,
                 endpoint: `/NangoHQ/nango/master/docs-v2/integrations/all/${slug}.mdx`,
                 headers: {
                     'Authorization': '', // No authorization needed for raw GitHub content
