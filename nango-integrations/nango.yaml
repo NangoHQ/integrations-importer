@@ -1,0 +1,16 @@
+integrations:
+  unauthenticated:
+    syncs:
+      providers:
+        description: |
+          Keep all integrations in the providers.yaml in sync
+        endpoint: GET /providers
+        sync_type: full
+        track_deletes: true
+        runs: every day
+        output: Integration
+
+models:
+  Integration:
+    id: string
+    __string: any

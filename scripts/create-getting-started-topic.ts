@@ -6,7 +6,7 @@ const createGettingStartedTopic = async () => {
     const nango = new Nango({ secretKey });
 
     const providerConfigKey = process.env['DISCOURSE_PROVIDER_CONFIG_KEY'] || 'discourse';
-    const connectionId = process.env['GLOBAL_CONNECTION_ID'] || 'global';
+    const connectionId = process.env['DISCOURSE_CONNECTION_ID'] || 'global';
 
     const config = {
         endpoint: '/categories',
