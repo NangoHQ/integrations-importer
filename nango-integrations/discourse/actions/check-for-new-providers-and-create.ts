@@ -1,4 +1,5 @@
 import type { NangoAction, ProxyConfiguration, LastSyncDate } from '../../models';
+import { extractGettingStarted, removeHtmlLikeTags, formatMarkdownLinks } from '../../utils/parse-markdown.js';
 
 export default async function runAction(nango: NangoAction, input: LastSyncDate): Promise<void> {
     let cursor: string | null = null;
@@ -14,8 +15,7 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
                 cursor: cursor || ''
             },
             headers: {
-                // Note: This assumes that accessing private properties is intentional.
-                Authorization: `Bearer ${(nango as any)?.nango?.secretKey || ''}`,  // Ensure it's safely accessed
+                Authorization: `Bearer ${(nango as any)?.nango?.secretKey || ''}`,
                 "Provider-Config-Key": 'unauthenticated',
                 "Connection-Id": 'u'
             }
@@ -37,7 +37,53 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
 
             const { data } = await nango.post(config);
 
-            await nango.log(`Created category: ${data.category.name}`);
+            const { name, slug, id } = data;
+
+            await nango.log(`Created category: ${name}`);
+
+            const readMePage = `https://raw.githubusercontent.com`;
+
+            const mdxResponse = await nango.get({
+                baseUrlOverride: 'https://raw.githubusercontent.com',
+                endpoint: `/NangoHQ/nango/master/docs-v2/integrations/all/${slug}.mdx`,
+                headers: {
+                    'Authorization': '', // No authorization needed for raw GitHub content
+                }
+            });
+
+            const mdxContent = mdxResponse.data;
+            let gettingStartedSection = extractGettingStarted(mdxContent);
+            if (gettingStartedSection) {
+                // Remove Tip or other HTML-like tags
+                gettingStartedSection = removeHtmlLikeTags(gettingStartedSection);
+
+                // Format markdown links
+                const formattedSection = formatMarkdownLinks(gettingStartedSection);
+                const topicContent = {
+                    title: `Getting Started with ${name}`,
+                    category: id,
+                    raw: formattedSection
+                };
+
+                await nango.log(`Creating "Getting Started" topic for ${name}...`);
+                await nango.log(topicContent)
+
+                const response = await nango.triggerAction<unknown, {id: string}>(nango.providerConfigKey, nango.connectionId, 'create-topic', topicContent);
+
+                const { id: topicId } = response;
+                const updateTopicStatus = {
+                    id: Number(topicId),
+                    status: 'pinned',
+                    enabled: "true",
+                    until: "2030-12-31"
+                };
+
+                await nango.log(`Updating status for "Getting Started" topic for ${name}...`);
+                await nango.log(updateTopicStatus)
+
+                await nango.triggerAction(nango.providerConfigKey, nango.connectionId, 'update-topic-status', updateTopicStatus);
+            }
+
         }
 
         cursor = next_cursor;
