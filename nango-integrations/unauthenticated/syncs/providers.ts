@@ -2,6 +2,8 @@ import type { NangoSync, Integration } from '../../models';
 import { parseYaml } from '../../utils/parse-yaml.js';
 
 export default async function fetchData(nango: NangoSync): Promise<void> {
+    const lastSyncDate = nango.lastSyncDate;
+
     const response = await nango.get({
         baseUrlOverride: 'https://raw.githubusercontent.com',
         endpoint: '/NangoHQ/nango/master/packages/shared/providers.yaml',
@@ -30,6 +32,8 @@ export default async function fetchData(nango: NangoSync): Promise<void> {
         }
 
         await nango.batchSave(allIntegrations, 'Integration');
+
+        await nango.triggerAction('discourse', 'global', 'check-for-new-providers-and-create', { lastSyncDate });
 
     } catch (error) {
         console.error('Error parsing YAML:', error);

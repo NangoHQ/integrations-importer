@@ -24,7 +24,13 @@ const importKnowledgeBase = async () => {
         const { id, row: entry } = entryData;
         if (entry.API) {
             const { API, Topic } = entry;
-            const { name, title } = API.select;
+            const { Title } = entry;
+            const { name } = API.select;
+
+            let title = '';
+            if (Title.title && Title.title.length > 0 && Title.title[0].plain_text) {
+                title = Title.title[0].plain_text;
+            }
 
             // fetch the page content as well
             const { content } = await nango.triggerAction<{pageId: string;}, { content: string }>(notionProviderConfigKey, notionConnectionId, 'fetch-rich-page', { pageId: id });
@@ -48,7 +54,6 @@ const importKnowledgeBase = async () => {
                     tags.push(Topic.select.name)
                 }
 
-                // create the topic
                 const topic = {
                     title,
                     category: category_id,
@@ -56,11 +61,15 @@ const importKnowledgeBase = async () => {
                     tags
                 };
 
-                console.log(topic)
-
-                const topicResponse = await nango.triggerAction<unknown, {id: string}>(discourseProviderConfigKey, discourseConnectionId, 'create-topic', topic);
-
-                console.log(topicResponse);
+                if (topic.title) {
+                    try {
+                        console.log('Creating topic');
+                        console.log(topic);
+                        const topicResponse = await nango.triggerAction(discourseProviderConfigKey, discourseConnectionId, 'create-topic', topic);
+                    } catch(e) {
+                        console.log(e.response.data.error)
+                    }
+                }
             }
 
         }

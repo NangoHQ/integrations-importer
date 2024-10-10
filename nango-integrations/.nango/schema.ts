@@ -7,3 +7,19 @@ export interface Integration {
   [key: string]: any;
   id: string;
 };
+
+export interface LastSyncDate {
+  lastSyncDate: string | null;
+};
+
+export interface Category {
+  id: string;
+  name: string;
+  color: string;
+  description: string | null;
+  slug: string;
+};
+
+export interface CreatedCategories {
+  result: Category[];
+};

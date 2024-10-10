@@ -9,6 +9,22 @@ export interface Integration {
   [key: string]: any;
   id: string;
 };
+
+export interface LastSyncDate {
+  lastSyncDate: string | null;
+};
+
+export interface Category {
+  id: string;
+  name: string;
+  color: string;
+  description: string | null;
+  slug: string;
+};
+
+export interface CreatedCategories {
+  result: Category[];
+};
 // ------ /Models
 
 // ------ SDK
@@ -406,6 +422,32 @@ export const NangoFlows = [
       }
     ],
     "actions": [],
+    "postConnectionScripts": []
+  },
+  {
+    "providerConfigKey": "discourse",
+    "syncs": [],
+    "actions": [
+      {
+        "name": "check-for-new-providers-and-create",
+        "type": "action",
+        "description": "Grab all the providers from the sync, check for updated ones\nand create them as a topic",
+        "version": "",
+        "scopes": [],
+        "input": "LastSyncDate",
+        "output": [
+          "CreatedCategories"
+        ],
+        "usedModels": [
+          "CreatedCategories",
+          "Category",
+          "LastSyncDate"
+        ],
+        "endpoint": {
+          "GET": "/new-providers"
+        }
+      }
+    ],
     "postConnectionScripts": []
   }
 ] as const;

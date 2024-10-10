@@ -9,8 +9,24 @@ integrations:
         track_deletes: true
         runs: every day
         output: Integration
+  discourse:
+    actions:
+      check-for-new-providers-and-create:
+        description: |
+          Grab all the providers from the sync, check for updated ones
+          and create them as a topic
+        input: LastSyncDate
+        endpoint: GET /new-providers
 
 models:
   Integration:
     id: string
     __string: any
+  LastSyncDate:
+    lastSyncDate: string | null
+  Category:
+    id: string
+    name: string
+    color: string
+    description: string | null
+    slug: string
