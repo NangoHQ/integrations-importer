@@ -19,7 +19,3 @@ export interface Category {
   description: string | null;
   slug: string;
 };
-
-export interface CreatedCategories {
-  result: Category[];
-};

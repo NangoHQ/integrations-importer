@@ -21,10 +21,6 @@ export interface Category {
   description: string | null;
   slug: string;
 };
-
-export interface CreatedCategories {
-  result: Category[];
-};
 // ------ /Models
 
 // ------ SDK
@@ -435,12 +431,8 @@ export const NangoFlows = [
         "version": "",
         "scopes": [],
         "input": "LastSyncDate",
-        "output": [
-          "CreatedCategories"
-        ],
+        "output": null,
         "usedModels": [
-          "CreatedCategories",
-          "Category",
           "LastSyncDate"
         ],
         "endpoint": {

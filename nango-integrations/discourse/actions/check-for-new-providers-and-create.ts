@@ -1,6 +1,6 @@
-import type { NangoAction, ProxyConfiguration, CreatedCategories, Category, LastSyncDate } from '../../models';
+import type { NangoAction, ProxyConfiguration, LastSyncDate } from '../../models';
 
-export default async function runAction(nango: NangoAction, input: LastSyncDate): Promise<CreatedCategories> {
+export default async function runAction(nango: NangoAction, input: LastSyncDate): Promise<void> {
     let cursor: string | null = null;
 
     do {
