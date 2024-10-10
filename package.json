@@ -1,0 +1,21 @@
+{
+  "name": "discourse-import",
+  "version": "1.0.0",
+  "description": "Discourse Importer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nangohq/node": "^0.42.15",
+    "@types/js-yaml": "^4.0.9",
+    "axios": "^1.7.7",
+    "js-yaml": "^4.1.0",
+    "nango": "^0.42.15",
+    "tsx": "^4.19.1",
+    "typescript": "5.3.3"
+  }
+}
