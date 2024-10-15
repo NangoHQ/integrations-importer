@@ -67,7 +67,7 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
                 };
 
                 await nango.log(`Creating "Getting Started" topic for ${name}...`);
-                await nango.log(topicContent)
+                await nango.log(JSON.stringify(topicContent, null, 2));
 
                 const response = await nango.triggerAction<unknown, {id: string}>(nango.providerConfigKey, nango.connectionId, 'create-topic', topicContent);
 
@@ -80,7 +80,7 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
                 };
 
                 await nango.log(`Updating status for "Getting Started" topic for ${name}...`);
-                await nango.log(updateTopicStatus)
+                await nango.log(JSON.stringify(updateTopicStatus, null, 2));
 
                 await nango.triggerAction(nango.providerConfigKey, nango.connectionId, 'update-topic-status', updateTopicStatus);
             }
