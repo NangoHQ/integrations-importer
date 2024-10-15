@@ -39,7 +39,7 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
 
             const { data } = await nango.post(config);
 
-            const { name, slug, id } = data;
+            const { name, slug, id } = data.category;
 
             await nango.log(`Created category: ${name}`);
 
