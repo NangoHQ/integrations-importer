@@ -22,9 +22,7 @@ integrations:
       content-to-db:
         description: |
           Fetches a page of data in Notion to then create a database from that content
-        endpoint:
-          method: POST
-          path: /content-to-db
+        endpoint: POST /content-to-db
         input: ContentToDb
         output: SuccessResponse
       check-for-new-providers-and-create:
