@@ -17,6 +17,22 @@ integrations:
           and create them as a topic
         input: LastSyncDate
         endpoint: GET /new-providers
+  notion-db:
+    actions:
+      content-to-db:
+        description: |
+          Fetches a page of data in Notion to then create a database from that content
+        endpoint:
+          method: POST
+          path: /content-to-db
+        input: ContentToDb
+        output: SuccessResponse
+      check-for-new-providers-and-create:
+        description: |
+          Grab all the new providers from the sync, check for updated ones 
+          and create them as a Notion entry in a database
+        input: LastSyncDate
+        endpoint: GET /new-providers
 
 models:
   Integration:
@@ -30,3 +46,8 @@ models:
     color: string
     description: string | null
     slug: string
+  ContentToDb:
+    sourcePage: string
+    targetDb: string
+  SuccessResponse:
+    success: boolean
