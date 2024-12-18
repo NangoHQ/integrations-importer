@@ -37,12 +37,13 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
                 data: topic
             };
 
+            await nango.log(`Creating category: ${record.display_name}...`);
+
             const { data } = await nango.post(config);
 
             const { name, slug, id } = data.category;
 
             await nango.log(`Created category: ${name}`);
-
 
             const mdxResponse = await nango.get({
                 baseUrlOverride: githubRawContentBase,
