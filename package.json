@@ -1,7 +1,7 @@
 {
-  "name": "discourse-import",
+  "name": "import-integrations",
   "version": "1.0.0",
-  "description": "Discourse Importer",
+  "description": "Integrations Importer",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

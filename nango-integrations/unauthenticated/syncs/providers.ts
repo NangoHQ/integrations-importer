@@ -34,6 +34,7 @@ export default async function fetchData(nango: NangoSync): Promise<void> {
         await nango.batchSave(allIntegrations, 'Integration');
 
         await nango.triggerAction('discourse', 'global', 'check-for-new-providers-and-create', { lastSyncDate });
+        await nango.triggerAction('notion-db', 'to-db', 'check-for-new-providers-and-create', { lastSyncDate });
 
     } catch (error) {
         console.error('Error parsing YAML:', error);
