@@ -1,9 +1,5 @@
 import type { NangoAction, ProxyConfiguration, LastSyncDate } from '../../models';
-
-interface EnvEntry {
-  name: string;
-  value: string;
-}
+import { getEnv } from '../../helpers/get-env.js';
 
 export default async function runAction(nango: NangoAction, input: LastSyncDate): Promise<void> {
     let cursor: string | null = null;
@@ -69,7 +65,3 @@ export default async function runAction(nango: NangoAction, input: LastSyncDate)
 
     } while (cursor);
 }
-
-const getEnv = (env: EnvEntry[] | null, name: string) => {
-  return env?.find((v) => v.name === name)?.value;
-};
