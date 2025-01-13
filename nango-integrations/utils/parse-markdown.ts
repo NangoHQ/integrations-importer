@@ -1,6 +1,6 @@
 // Function to extract the "Getting Started" section from the MDX content
 export const extractGettingStarted = (mdxContent: string): string | null => {
-    const gettingStartedRegex = /## Getting started([^##]+)/i;
+    const gettingStartedRegex = /## Useful links([^##]+)/i;
     const match = mdxContent.match(gettingStartedRegex);
 
     if (match && match[1]) {
