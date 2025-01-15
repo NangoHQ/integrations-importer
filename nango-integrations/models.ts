@@ -42,6 +42,10 @@ export interface CreateLinearIssue {
   estimate?: number;
   dueDate?: string;
 };
+
+export interface CreatedTask {
+  id: string;
+};
 // ------ /Models
 
 // ------ SDK
@@ -564,7 +568,33 @@ export const NangoFlows = [
   },
   {
     "providerConfigKey": "linear",
-    "syncs": [],
+    "syncs": [
+      {
+        "name": "create-task-on-schedule",
+        "type": "sync",
+        "description": "Create a task on a schedule",
+        "sync_type": "full",
+        "usedModels": [
+          "CreatedTask"
+        ],
+        "runs": "every 30 days",
+        "version": "",
+        "track_deletes": false,
+        "auto_start": true,
+        "input": null,
+        "output": [
+          "CreatedTask"
+        ],
+        "scopes": [],
+        "endpoints": [
+          {
+            "method": "GET",
+            "path": "/tasks"
+          }
+        ],
+        "webhookSubscriptions": []
+      }
+    ],
     "actions": [
       {
         "name": "create-issues-from-notion-db",
