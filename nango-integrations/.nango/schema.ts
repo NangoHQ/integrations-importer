@@ -40,3 +40,7 @@ export interface CreateLinearIssue {
   estimate?: number;
   dueDate?: string;
 };
+
+export interface CreatedTask {
+  id: string;
+};

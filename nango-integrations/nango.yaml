@@ -39,6 +39,12 @@ integrations:
         input: CreateLinearIssue
         endpoint: POST /issues
         output: SuccessResponse
+    syncs:
+      create-task-on-schedule:
+        description: Create a task on a schedule
+        endpoint: GET /tasks
+        output: CreatedTask
+        runs: every 30 days
 
 models:
   Integration:
@@ -67,3 +73,11 @@ models:
     parentId?: string
     estimate?: number
     dueDate?: string
+  CreatedTask:
+    id: string
+    createdAt: string
+    updatedAt: string
+    dueDate: string
+    team:
+      id: string
+    title: string
