@@ -6,7 +6,7 @@ export default async function fetchData(nango: NangoSync): Promise<void> {
 
     const response = await nango.get({
         baseUrlOverride: 'https://raw.githubusercontent.com',
-        endpoint: '/NangoHQ/nango/master/packages/shared/providers.yaml',
+        endpoint: '/NangoHQ/nango/master/packages/providers/providers.yaml',
         headers: {
             'Authorization': '', // No authorization needed for raw GitHub content
         }

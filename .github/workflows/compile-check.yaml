@@ -1,0 +1,42 @@
+name: Compile Check
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+
+concurrency:
+    group: script-compile--${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    flow-compilation:
+        runs-on: ubuntu-latest
+        env:
+          NANGO_CLI_UPGRADE_MODE: auto
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  cache: "npm"
+                  node-version-file: ".nvmrc"
+
+            - name: Install nango CLI
+              run: |
+                  npm install -g nango
+                  nango version --debug
+
+            - name: Install dependencies
+              working-directory: nango-integrations
+              run: |
+                npm install
+
+            - name: Compile with Nango
+              working-directory: nango-integrations
+              run: |
+                  nango compile --debug

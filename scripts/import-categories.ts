@@ -2,7 +2,7 @@ import yaml from 'js-yaml';
 import axios from 'axios';
 
 const fetchYamlData = async () => {
-    const url = 'https://raw.githubusercontent.com/NangoHQ/nango/master/packages/shared/providers.yaml';
+    const url = 'https://raw.githubusercontent.com/NangoHQ/nango/master/packages/providers/providers.yaml';
 
     const response = await axios.get(url);
 
