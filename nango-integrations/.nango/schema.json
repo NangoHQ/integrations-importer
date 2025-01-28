@@ -130,10 +130,39 @@
       "properties": {
         "id": {
           "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "team": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "title": {
+          "type": "string"
         }
       },
       "required": [
-        "id"
+        "id",
+        "createdAt",
+        "updatedAt",
+        "dueDate",
+        "team",
+        "title"
       ],
       "additionalProperties": false
     }

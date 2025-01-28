@@ -1,0 +1,45 @@
+name: Deploy Nango Integrations To Production Environment
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      NANGO_CLI_UPGRADE_MODE: auto
+      NANGO_DEPLOY_AUTO_CONFIRM: true
+      NANGO_SECRET_KEY_PROD: ${{ secrets.NANGO_SECRET_KEY_PROD }}
+    steps:
+      - name: Check if NANGO_SECRET_KEY_PROD is set
+        run: |
+          if [ -z "${{ env.NANGO_SECRET_KEY_PROD }}" ]; then
+            echo "Error: NANGO_SECRET_KEY_PROD secret is not set"
+            exit 1
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+          node-version-file: ".nvmrc"
+
+      - name: Install Nango CLI
+        run: |
+          npm install nango -g
+
+      - name: Install Zod
+        working-directory: nango-integrations
+        run: |
+          npm install zod
+
+      - name: Compile with Nango
+        working-directory: nango-integrations
+        run: |
+          nango compile --debug
+
+      - name: Deploy Prod
+        working-directory: nango-integrations
+        run: |
+          nango deploy prod

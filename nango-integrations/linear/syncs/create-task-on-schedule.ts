@@ -5,15 +5,18 @@ interface EnvEntry {
   value: string;
 }
 
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 export default async function fetchData(nango: NangoSync): Promise<void> {
     const env = await nango.getEnvironmentVariables();
     const teamId = getEnv(env, 'LINEAR_TEAM_ID');
     const assigneeId = getEnv(env, 'LINEAR_ASSIGNEE_ID');
     const currentMonth = new Date().getMonth();
+    const monthWord = months[currentMonth];
 
     const issue = {
-        teamId, 
-        title: "Enter hours for IE",
+        teamId,
+        title: `Enter hours for IE ${monthWord}`,
         assigneeId,
         dueDate: `${new Date().getFullYear()}-${currentMonth + 1}-26`,
         state: {

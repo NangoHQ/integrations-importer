@@ -43,4 +43,9 @@ export interface CreateLinearIssue {
 
 export interface CreatedTask {
   id: string;
+  createdAt: string;
+  updatedAt: string;
+  dueDate: string;
+  team: {  id: string;};
+  title: string;
 };
