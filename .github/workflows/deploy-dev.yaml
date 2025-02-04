@@ -42,6 +42,12 @@ jobs:
         run: |
           nango compile --debug
 
+      - name: Create integrations if not existing
+        env:
+          NANGO_SECRET_KEY: ${{ secrets.NANGO_SECRET_KEY_DEV }}
+        run: |
+          npx tsx scripts/create-integration-if-not-existing.ts
+
       - name: Deploy Dev
         working-directory: nango-integrations
         run: |
