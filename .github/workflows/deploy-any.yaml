@@ -1,0 +1,72 @@
+name: Deploy Nango Integrations To Any Environment
+
+on:
+    workflow_dispatch:
+        inputs:
+            stage:
+                type: string
+                description: 'Environment to deploy to (e.g., dev, prod, staging, etc.)'
+                required: true
+                default: 'dev'
+            integration:
+                type: string
+                description: 'Optional integration to deploy to only'
+                required: false
+                default: ''
+            allowDestructive:
+                type: choice
+                description: 'Deploy destructive changes without confirmation'
+                required: true
+                default: false
+                options:
+                    - true
+                    - false
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                cache: "npm"
+                node-version-file: ".nvmrc"
+
+            - name: Install npm modules
+              run: npm ci
+
+            - name: Set environment name
+              run: |
+                  STAGE="${{ inputs.stage }}"
+                  STAGE_UPPER="${STAGE^^}"
+                  echo "stage_upper=$STAGE_UPPER" >> $GITHUB_ENV
+
+            - name: Validate & Set Secret Key
+              env:
+                SECRETS_JSON: "${{ toJSON(secrets) }}"
+              run: |
+                  SECRET_KEY_VAR="NANGO_SECRET_KEY_${stage_upper}"
+                  SECRET_KEY=$(echo "$SECRETS_JSON" | jq -r --arg key "$SECRET_KEY_VAR" '.[$key]')
+
+                  if [ -z "$SECRET_KEY" ] || [ "$SECRET_KEY" == "null" ]; then
+                      echo "Error: Secret $SECRET_KEY_VAR is not set."
+                      exit 1
+                  fi
+
+                  echo "$SECRET_KEY_VAR=$SECRET_KEY" >> $GITHUB_ENV
+
+            - name: Ensure compilation
+              working-directory: nango-integrations
+              run: |
+                npx nango compile --debug
+
+            - name: Run Nango deploy
+              working-directory: nango-integrations
+              run: |
+                  INTEGRATION_ARG=""
+                  if [ -n "${{ inputs.integration }}" ]; then
+                    INTEGRATION_ARG="--integration \"${{ inputs.integration }}\""
+                  fi
+                  npx nango deploy "${{ inputs.stage }}" --auto-confirm ${{ inputs.allowDestructive == 'true' && '--allow-destructive' || '' }} $INTEGRATION_ARG
+
